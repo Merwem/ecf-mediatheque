@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+
+    #registration div{
+        display: flex;
+        flex-direction: column;
+        font-family: "Roboto";
+        margin-bottom: 15px;
+    }
+    #registration div input{
+        height: 50px;
+        border: none !important ;
+    }
+    .form-groupe{
+        width: 90%
+        height: 50vh
+    }
+    .submit{
+        padding: 15px 20px;
+        background-color: #1c1f2a;
+        font-family: "Roboto";
+        text-decoration: none;
+        color: white;
+        width: max-content;
+        transition: ease 0.2s;
+        border: solid 1px #1c1f2a;
+        cursor: pointer;
+    }
+    .submit:hover{
+        background-color: transparent;
+        color: black;
+        font-weight: bold;
+    }
+</style>
+
+    <div class="container">
+    <h1>Inscription</h1>
+    <div class="form-groupe">
+        {{ form_start(formRegistration) }}
+        {{ form_widget(formRegistration) }}
+        <button type="submit" class="submit" >S'inscrire</button>
+        {{ form_end(formRegistration) }}
+    </div>
+</div>
+{% endblock %}

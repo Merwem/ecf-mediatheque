@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<style>
+.container_titre_search{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+.container_books{
+	justify-content: center;
+	align-items: center;
+}
+</style>
+	<div class="container">
+	
+	<div class="container_titre_search">
+	
+		<h1>Bienvenu dans notre Médiathèque en ligne
+			{% if app.user %}
+				{{ app.user.username }}
+			{% endif %}
+		</h1>
+		<div class="search_input">
+		<p>Rechercher par titre/Auteur</p>
+			<input type="text" name="" id="input">
+		</div>
+	</div>
+		<div class="container_genre">
+			{% for genre in listeGenre %}
+				<h2 class="cat">{{ genre.name }}</h2>
+			{% endfor %}
+		</div>
+		<div class="container_books">
+			{% for book in listeBooks %}
+				<div style="background-image: url({{book.image}});" class="card_book {{book.FKgenreid.name}}">
+                <a class="lien_book" href="{{path('show_book',{'id' : book.id, 'name' : book.FKgenreid.name})}}"></a>
+                    <div class="container_infos_book">
+                        <h4>
+                            {{book.title}}
+                        </h4>
+                        <p>Parution :
+                            {{book.parution | date('d/m/Y')}}</p>
+                        <p>Auteur :
+                            {{book.auteur}}</p>
+							{% if book.emprunt and not book.emprunt.empruntaccord.dateRendu %}
+								<div style="
+								background-color: rgb(116, 15, 15) !important;
+								color: white !important;
+								font-family: 'Roboto'!important;
+								padding-top: 15px!important;
+								padding-bottom: 15px!important;
+								text-align: center!important;
+								width: 100%;
+								" class="non_dispo">non disponible</div>
+							{% endif %}
+                    </div>
+                    <div class="overlay"></div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	{% block javascripts %}
+
+	<script src="{{ asset('js/home.js') }}">
+	</script>
+	<script>
+	
+	input = document.getElementById('input')
+	books = document.querySelectorAll('.card_book')
+
+		input.addEventListener('keyup', () => {
+			categorys.forEach((cat) => {
+				cat.classList.remove('cat_active')
+			})
+			books.forEach((book) => {
+				book.classList.remove('card_non_active')
+				console.log(book.children[1].children[2].innerText.toLowerCase());
+				if(book.children[1].children[2].innerText.toLowerCase().indexOf(input.value) > -1 || book.children[1].children[0].innerText.toLowerCase().indexOf(input.value) > -1){
+					book.classList.add('card_active')
+				}else{
+					book.classList.add('card_non_active')
+				}
+			})
+			
+		})
+	</script>
+		
+
+	{% endblock %}
+{% endblock %}

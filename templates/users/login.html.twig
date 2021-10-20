@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+
+    #login div{
+        display: flex;
+        flex-direction: column;
+        font-family: "Roboto";
+        margin-bottom: 15px;
+    }
+    #login div input{
+        height: 50px;
+        border: none !important ;
+    }
+    .form-groupe{
+        width: 90%
+        height: 50vh
+    }
+    .submit{
+        padding: 15px 20px;
+        background-color: #1c1f2a;
+        font-family: "Roboto";
+        text-decoration: none;
+        color: white;
+        width: max-content;
+        transition: ease 0.2s;
+        border: solid 1px #1c1f2a;
+        cursor: pointer;
+    }
+    .submit:hover{
+        background-color: transparent;
+        color: black;
+        font-weight: bold;
+    }
+</style>
+    <div class="container">
+    <h1>Connexion</h1>
+    {% if error %} 
+        <div class="error">
+            {{error}}
+        </div>
+     {% endif %}
+    <div class="form-groupe">
+        {{ form_start(formLogin) }}
+        {{ form_widget(formLogin) }}
+        <button type="submit" class="submit" >Se connecter !</button>
+        {{ form_end(formLogin) }}
+    </div>
+</div>
+{% endblock %}

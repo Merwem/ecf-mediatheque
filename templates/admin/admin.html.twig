@@ -1,0 +1,183 @@
+{% extends 'base.html.twig' %}
+        
+
+{% block body %}
+<style>
+.top{
+    background-color: #1c1f2a;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+    font-family: "Roboto" !important;
+
+}
+.contaire_item{
+    background-color: white !important;
+    margin-bottom: 55px;
+    box-sizing: border-box;
+    padding-left:15px;
+    padding-bottom:15px;
+    padding-right:15px;
+    font-family: "Roboto";
+
+}
+.valid{
+    background-color: green;
+	text-decoration: none;
+    color: white;
+    padding: 15px 25px;
+}
+
+.form_accord{
+	display: flex;
+	flex-direction: row;
+	justify-content: end;	
+}
+.active_container{
+	display: block;
+}
+.non_active_container{
+	display: none;
+}
+.nav_admin{
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: ease 0.2s
+}
+.nav_admin:hover{
+	background-color: #1c1f2a;
+	color: white;
+}
+.active_nav{
+	background-color: #1c1f2a;
+	color: white;
+}
+.non_active_nav{
+	background-color:transparent;
+	color: black;
+}
+.container_marge{
+	margin-left: 20%;
+}
+</style>
+    <div class="navigation_container">
+        <p class="nav_admin insc active_nav">Demande d'inscription</p>
+        <p class="nav_admin demande_emprunt ">Demande d'emprunt</p>
+        <p class="nav_admin empr ">Emprunts en cours</p>
+    </div>
+	<div class="container container_marge">
+		<div class="container_inscription">
+			<h1>Bienvenu sur la page Administrateur
+				{{ app.user.prenom }}
+			</h1>
+			<div class="container_liste_demande insc active_container">
+				{% if listeAccord %}
+				<h3>Voici la liste des demandes d'inscription</h3>
+					{% for accord in listeAccord %}
+						<div class="contaire_item">
+							<div class="top">
+								<h3>Nom :
+									{{accord.user.username}}</h3>
+							</div>
+								<p>Adresse :
+									{{accord.user.adresse}}
+									{{accord.user.cp}}
+								</p>
+							
+							<div class="form_accord">
+								<a class="valid" href="{{path('accord_user',{'id': accord.id })}}" rel="noopener noreferrer">Valider</a>
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<div class="container_item">
+						<h3>Auncune nouvelle demande d'inscription.</h3>
+					</div>
+				{% endif %}
+			</div>
+			<div class="container_liste_demande demande_emprunt non_active_container">
+				{% if listeEmpruntFalse %}
+				<h3>Voici la liste des emprunts en attente</h3>
+					{% for emprunt in listeEmpruntFalse %}
+						<div class="contaire_item">
+							<div class="top">
+								<h3>Nom :
+									{{emprunt.user.username}}</h3>
+								<p>Nom du livre : {{ emprunt.book.title }}</p>
+							</div>
+							<p>Adresse :
+								{{emprunt.user.adresse}}
+								{{emprunt.user.cp}}
+							</p>
+							<p>Demande faite le : {{emprunt.createdAt | date('Y/m/d')}}</p>
+							<p>Suppression de la demande : {{emprunt.dateFin | date('Y/m/d')}}</p>
+						<div class="form_accord">
+							<a class="valid" href="{{path('accord_emprunt',{'id': emprunt.id })}}" rel="noopener noreferrer">Valider</a>
+						</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<div class="container_item">
+						<h3>Auncune nouvelle attente d'emprunt.</h3>
+					</div>
+				{% endif %}
+			</div>
+			<div class="container_liste_demande empr non_active_container">
+				{% if listeEmpruntTrue %}
+				<h3>Voici la liste des emprunts en cours</h3>
+					{% for emprunt in listeEmpruntTrue %}
+						<div class="contaire_item">
+							<div class="top">
+								<h3>Nom :
+									{{emprunt.user.username}}</h3>
+								<p>Nom du livre : {{ emprunt.book.title }}</p>
+							</div>
+							<p>Adresse :
+								{{emprunt.user.adresse}}
+								{{emprunt.user.cp}}
+							</p>
+							<p>Les client est venu chercher son livre le : {{emprunt.empruntaccord.dateRecup | date('Y/m/d')}}</p>
+						<div class="form_accord">
+							<a class="valid" href="{{path('rend_emprunt',{'id': emprunt.id })}}" rel="noopener noreferrer">Rendu</a>
+						</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<div class="container_item">
+						<h3>Auncun emprunt en cours.</h3>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+
+	</div>
+	{% block javascripts %}
+		<script>
+			navs = document.querySelectorAll('.nav_admin');
+			containers = document.querySelectorAll('.container_liste_demande');
+
+			navs.forEach((nav) => {
+				nav.addEventListener('click', () => {
+					containers.forEach((container) => {
+						if(container.classList[1] == nav.classList[1]){
+							navs.forEach((el) => {
+								el.classList.remove('active_nav')
+							})
+							nav.classList.add('active_nav')
+							containers.forEach((elCont) => {
+								elCont.classList.remove('active_container')
+								elCont.classList.add('non_active_container')
+							})
+							container.classList.remove('non_active_container')
+							container.classList.add('active_container')
+						}
+					})
+				})
+			})
+		</script>
+	{% endblock %}
+{% endblock %}

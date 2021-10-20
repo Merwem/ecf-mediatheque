@@ -1,0 +1,94 @@
+.container_books{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.card_book{
+    width: 350px;
+    min-height: 500px;
+    position: relative;
+    margin-bottom: 15px;
+    margin-right:5px;
+    transition: ease 0.2s;
+    background-size: 200% ;
+}
+
+.book_img img{
+    width: 100%;
+}
+
+.overlay{
+    background-color: rgba(0, 0, 0, 0.315);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.container_infos_book{
+    position: absolute;
+    z-index: 3;
+    color: white;
+    font-family: "Roboto";
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container_infos_book h4{
+    font-size: 44px;
+}
+
+.lien_book{
+    position: absolute;
+    z-index: 6;
+    background-color: transparent;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.card_book:hover {
+    background-size: 230% !important;
+}
+
+.card_active{
+    display: block;
+}
+
+.card_non_active{
+    display: none;
+}
+.cat{
+    padding: 15px 25px;
+    background-color: transparent;
+    transition: ease 0.2s;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+.cat_active{
+    background-color: #1c1f2a;
+    color: #e6e6e6;
+}
+.cat:hover{
+    background-color: #1c1f2a;
+    color: #e6e6e6;
+}
+
+.non_dispo{
+    background-color: rgb(116, 15, 15) !important;
+    color: white !important;
+    font-family: "Roboto"!important;
+    padding-top: 15px!important;
+    padding-bottom: 15px!important;
+    text-align: center!important;
+    width: 100%;
+}
+

@@ -1,0 +1,187 @@
+{% extends 'base.html.twig' %}
+        
+        
+
+
+{% block body %}
+<style>
+.top{
+    width: 100%;
+    background-color: #1c1f2a;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-family: "Roboto" !important;
+    box-sizing: border-box;
+}
+.contaire_item{
+    background-color: white !important;
+    margin-bottom: 55px;
+    box-sizing: border-box;
+    padding-left:15px;
+    padding-bottom:15px;
+    font-family: "Roboto" !important;
+    padding-right:15px;
+}
+.navigation_container{
+    position: fixed;
+    width: max-content;
+    background-color: white;
+    height: 100vh;
+    left: 0px;
+    top: 50px;
+    padding: 30px;
+    font-family: "Roboto";
+}
+.attention{
+    background-color: rgb(116, 15, 15);
+    width: 100%;
+    color: white;
+    box-sizing: border-box;
+    padding: 20px;
+}
+.active_container{
+	display: block;
+}
+.non_active_container{
+	display: none;
+}
+.nav_admin{
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: ease 0.2s
+}
+.nav_admin:hover{
+	background-color: #1c1f2a;
+	color: white;
+}
+.active_nav{
+	background-color: #1c1f2a;
+	color: white;
+}
+.non_active_nav{
+	background-color:transparent;
+	color: black;
+}
+.container_marge{
+	margin-left: 20%;
+}
+
+
+</style>
+    <div class="navigation_container">
+        <p class="nav_admin cours active_nav">Emprunts en cours</p>
+        <p class="nav_admin attente">Emprunts en attente</p>
+        <p class="nav_admin rendu">Mes anciens emprunts</p>
+    </div>
+	<div class="container container_marge">
+		<div class="container_inscription">
+			<h1>Bienvenue sur la liste de vos emprunts
+			</h1>
+			<div class="container_liste_demande attente non_active_container">
+				<h3>Voici la liste de vos emprunts en attente de récupération</h3>
+				{% if userEmpruntEnAttente  %}
+					{% for emprunt in userEmpruntEnAttente %}
+						<div class="contaire_item">
+                            <div class="top">
+                                <h3>Nom :
+                                    {{emprunt.book.title}}</h3>
+                                <p>Auteur :
+                                    {{emprunt.book.auteur}}
+                                </p>
+                            </div>
+							<p>Demande d'emprunt datant du :
+								{{emprunt.createdAt | date('d/m/Y')}}
+							</p>
+                            {% if emprunt.empruntAccord.valid == false %}
+                                <p class="attention">Atention ! Vous avez jusqu'au {{emprunt.datefin | date('d/m/Y')}} pour aller chercher chercher votre livre !<p>
+                            {% endif %}
+						</div>
+						{# <div class="form_accord">
+							<a href="{{path('accord_user',{'id': accord.id })}}" rel="noopener noreferrer">Valider</a>
+						</div> #}
+					{% endfor %}
+				{% else %}
+					<div class="container_item">
+						<h3>Auncune nouvelle demande.</h3>
+					</div>
+				{% endif %}
+			</div>
+			<div class="container_liste_demande rendu non_active_container">
+				<h3>Voici la liste de vos emprunts déjà rendu</h3>
+				{% if userEmpruntRendu %}
+					{% for emprunt in userEmpruntRendu %}
+						<div class="contaire_item">
+                            <div class="top">
+                                <h3>Nom :
+                                    {{emprunt.book.title}}</h3>
+                                <p>Auteur :
+                                    {{emprunt.book.auteur}}
+                                </p>
+                            </div>
+							<p>Livre rendu le :
+								{{emprunt.empruntaccord.dateRendu | date('d/m/Y')}}
+							</p>
+						</div>
+					{% endfor %}
+				{% else %}
+					<div class="container_item">
+						<h3>Vous n'avez emprunter aucuns livres. N'hésitez pas !</h3>
+					</div>
+				{% endif %}
+			</div>
+			<div class="container_liste_demande cours active_container">
+				<h3>Voici la liste de vos emprunts en cours</h3>
+				{% if userEmpruntNonRendu %}
+					{% for emprunt in userEmpruntNonRendu %}
+						<div class="contaire_item">
+                            <div class="top">
+                                <h3>Nom :
+                                    {{emprunt.book.title}}</h3>
+                                <p>Auteur :
+                                    {{emprunt.book.auteur}}
+                                </p>
+                            </div>
+							<p>Livre Récuprer le :
+								{{emprunt.empruntaccord.dateRecup | date('d/m/Y')}}
+							</p>
+						</div>
+					{% endfor %}
+				{% else %}
+					<div class="container_item">
+						<h3>Aucun emprunt en cours.</h3>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+
+	</div>
+{% block javascripts %}
+		<script>
+			navs = document.querySelectorAll('.nav_admin');
+			containers = document.querySelectorAll('.container_liste_demande');
+
+			navs.forEach((nav) => {
+				nav.addEventListener('click', () => {
+					containers.forEach((container) => {
+						if(container.classList[1] == nav.classList[1]){
+							navs.forEach((el) => {
+								el.classList.remove('active_nav')
+							})
+							nav.classList.add('active_nav')
+							containers.forEach((elCont) => {
+								elCont.classList.remove('active_container')
+								elCont.classList.add('non_active_container')
+							})
+							container.classList.remove('non_active_container')
+							container.classList.add('active_container')
+						}
+					})
+				})
+			})
+		</script>
+	{% endblock %}
+{% endblock %}

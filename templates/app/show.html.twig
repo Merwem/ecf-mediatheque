@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container container_show">
+    <div class="container_infos_show">
+        <h1> {{book.title}} </h1>   
+        <div class="container_text_show">
+            <p>Auteur : {{book.auteur}}</p>
+            <p>Résumé :<br>{{book.description}} </p>
+            <p>Date de parution :<br>{{book.parution | date('m/Y') }} </p>
+            <p>Genre : {{book.FKgenreid.name }} </p>
+        </div>
+            {% if book.emprunt and not book.emprunt.empruntAccord.dateRendu %}
+                <div style="
+								background-color: rgb(116, 15, 15) !important;
+								color: white !important;
+								font-family: 'Roboto'!important;
+								padding-top: 15px!important;
+								padding-bottom: 15px!important;
+								text-align: center!important;
+								width: 100%;
+								" class="non_dispo">non disponible</div>
+            {% else %}
+                {% if app.user %}
+                    <a class="btn_emprunter" href="{{path('emprunt',{'idBook' : idBook})}}">Emprunter</a>
+                    {% else %}
+                        <a class="btn_emprunter">Veuillez vous connecter pour emprunter</a>
+                {% endif %}
+
+
+            {% endif %}
+                
+        <div class="caintainer_other">
+            <p class="title_other">D'autre livres du même genre :</p>
+            <div class="container_card_other">
+                {% for other in SameGenre %}
+                    <div style="background-image:url({{other.image}})" class="card_other">
+                    <div class="container_info_other">
+                        <h2>{{other.title}}</h2>
+                    </div>
+                    {% if other.emprunt and not other.emprunt.empruntAccord.dateRendu %}
+								<div style="
+								background-color: rgb(116, 15, 15) !important;
+								color: white !important;
+								font-family: 'Roboto'!important;
+                                position:absolute;
+                                bottom: 0px;
+								padding-top: 15px!important;
+								padding-bottom: 15px!important;
+								text-align: center!important;
+								width: 100%;
+								" class="non_dispo">non disponible</div>
+							{% endif %}
+                    <a class="lien_show" href="{{path('show_book',{'id' : other.id, 'name' : other.FKgenreid.name})}}"></a>
+                        <div class="overlay_show"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div style="background-image:url({{book.image}})" class="container_show_img">
+    </div>
+</div>
+
+{% endblock %}

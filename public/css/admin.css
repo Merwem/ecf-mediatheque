@@ -1,0 +1,25 @@
+
+
+.container_inscription{
+    margin-left: 100px;
+}
+.top{
+    width: 100%;
+    background-color: #1c1f2a;
+    color: white;
+    display: flex;
+    flex-direction: row;
+}
+
+.navigation_container{
+    position: fixed;
+    width: max-content;
+    background-color: white;
+    height: 100vh;
+    left: 0px;
+    top: 50px;
+    padding: 30px;
+    font-family: "Roboto";
+
+    
+}
